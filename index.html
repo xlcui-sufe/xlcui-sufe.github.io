@@ -14,16 +14,15 @@
       <div class="portrait-wrap">
         <img class="portrait" src="profile.jpg" alt="Portrait of Xiaolong Cui">
       </div>
-      <div class="intro">
+      <div class="intro" id="profile-information">
         <h1>Xiaolong Cui<span>崔小龙</span></h1>
         <p class="affiliation">Shanghai University of Finance and Economics</p>
 
         <section class="about" aria-label="About Xiaolong Cui">
-          <p class="bio">I am an Assistant Professor at the School of Statistics and Data Science, Shanghai University of Finance and Economics. I received my B.S. and Ph.D. in Statistics from Nankai University in 2019 and 2024, respectively, under the supervision of <a class="advisor" href="http://web.stat.nankai.edu.cn/chlzou/">Prof. Changliang Zou</a> and <a class="advisor" href="http://web.stat.nankai.edu.cn/zjwang/">Prof. Zhaojun Wang</a>. From 2024 to 2026, I was a Postdoctoral Researcher at Nankai University.</p>
+          <p class="bio">I am an Assistant Professor at School of Statistics and Data Science, Shanghai University of Finance and Economics. I received my B.S. degree in Statistics in 2019 and Ph.D. degree in Statistics in 2024 from Nankai University. During my Ph.D. study, I was advised by <a class="advisor" href="http://web.stat.nankai.edu.cn/chlzou/">Prof. Changliang Zou</a> and <a class="advisor" href="http://web.stat.nankai.edu.cn/zjwang/">Prof. Zhaojun Wang</a> at Nankai University. From 2024 to 2026, I was a Postdoctoral Researcher at Nankai University.</p>
         </section>
 
-        <section class="contact" aria-labelledby="contact-title">
-          <h2 id="contact-title">Contact Information</h2>
+        <section class="contact" aria-label="Contact information">
           <p><strong>Email:</strong> <a href="mailto:nk.xlcui@gmail.com">nk.xlcui@gmail.com</a> or <a href="mailto:cuixiaolong@sufe.edu.cn">cuixiaolong@sufe.edu.cn</a></p>
         </section>
       </div>
@@ -36,7 +35,7 @@
       </section>
 
       <section id="publications">
-        <h2>Selected Publications</h2>
+        <h2>Publications</h2>
         <ol class="papers">
           <li><strong>Xiaolong Cui</strong>, Haoyu Geng, Guanghui Wang, Zhaojun Wang and Changliang Zou (2026). ART: Distribution-free and model-agnostic changepoint detection with finite-sample guarantees. <em>Journal of the Royal Statistical Society: Series B (Statistical Methodology)</em>, available online.<a class="paper-link" href="https://doi.org/10.1093/jrsssb/qkag037">https://doi.org/10.1093/jrsssb/qkag037</a></li>
           <li><strong>Xiaolong Cui</strong>, Haoyu Geng, Haojie Ren, Zhaojun Wang and Changliang Zou (2025). Online multiple changepoint detection with false discovery rate control. <em>IEEE Transactions on Information Theory</em>, 71(11), 8697–8722.<a class="paper-link" href="https://doi.org/10.1109/TIT.2025.3610613">https://doi.org/10.1109/TIT.2025.3610613</a></li>
@@ -49,6 +48,34 @@
 
     <footer><p>© <span id="year"></span> Xiaolong Cui.</p><a href="#top">Back to top ↑</a></footer>
   </main>
-  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const portraitWrap = document.querySelector('.portrait-wrap');
+    const profileInformation = document.getElementById('profile-information');
+    const desktopLayout = window.matchMedia('(min-width: 951px)');
+    const portraitRatio = 295 / 413;
+    let alignmentFrame = 0;
+
+    function alignPortrait() {
+      cancelAnimationFrame(alignmentFrame);
+      alignmentFrame = requestAnimationFrame(() => {
+        if (!desktopLayout.matches) {
+          portraitWrap.style.removeProperty('width');
+          portraitWrap.style.removeProperty('height');
+          return;
+        }
+
+        const height = Math.round(profileInformation.getBoundingClientRect().height);
+        portraitWrap.style.height = `${height}px`;
+        portraitWrap.style.width = `${Math.round(height * portraitRatio)}px`;
+      });
+    }
+
+    new ResizeObserver(alignPortrait).observe(profileInformation);
+    desktopLayout.addEventListener('change', alignPortrait);
+    window.addEventListener('resize', alignPortrait);
+    alignPortrait();
+  </script>
 </body>
 </html>
